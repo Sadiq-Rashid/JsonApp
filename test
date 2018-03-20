@@ -1,0 +1,55 @@
+<!Doctype Html>
+<head>
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1> JSON and AJAX</h1>
+<button id="btn">Fetch Infor for three new animals</button>
+<div id="animal-info"></div>
+<script>
+    var pageCounter=1;
+    var animalContainer = document.getElementById("animal-info")
+    var btn = document.getElementById("btn");
+    btn.addEventListener("click", function(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.open('Get', 'https://learnwebcode.github.io/json-example/animals-'+pageCounter+'.json');
+    xhttp.onload = function(){
+    var ourData = JSON.parse(xhttp.responseText);
+    renderHTML(ourData);
+    };
+    xhttp.onerror = function(){
+        console.log("Connection error");
+    };
+    xhttp.send();
+    pageCounter++;
+    if(pageCounter > 3){
+        btn.classList.add("hide-me");
+    }
+    });
+
+    function renderHTML(data){
+        var HtmlString = "";
+
+        for( i= 0; i<data.length; i++)
+        {
+            HtmlString += "<p>"+ data[i].name + " is a " + data[i].species + " that likes ";
+            for(ii=0; ii< data[i].foods.likes.length; ii++)
+            {
+               if(ii == 0){
+                HtmlString += data[i].foods.likes[ii];
+               }
+               else
+               {
+                HtmlString += " and " + data[i].foods.likes[ii];
+               }
+            }
+            HtmlString +='.</p>';
+        }
+
+        animalContainer.insertAdjacentHTML('beforeend',HtmlString);
+    }
+
+</script>
+</body>
+</htnl>
